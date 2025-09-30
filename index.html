@@ -1,0 +1,527 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Agbor Joy's Portfolio</title>
+    <!-- Add Favicon (Title Bar Icon) -->
+    <!-- Note: You can replace this placeholder with a custom image file (e.g., your Deafversity logo) -->
+    <link rel="icon" type="image/png" href="DT.png">
+    <!-- Use Tailwind CSS via CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
+    <!-- Import Cursive Font ('Dancing Script') for Deaftek brand name -->
+    <link href="https://fonts.googleapis.com/css2?family=Dancing+Script:wght@700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://fonts.google.com/specimen/Caveat">
+    <link rel="stylesheet" href="cv.html">
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+            @apply bg-gray-900 text-gray-100;
+        }
+        /* Custom styles for section dividers and highlights */
+        .divider {
+            height: 2px;
+            width: 80px;
+            @apply bg-blue-500 rounded-full my-4;
+        }
+
+        /* Custom animation for the blinking effect */
+        @keyframes pulse-glow {
+            0%, 100% {
+                opacity: 1;
+                text-shadow: 0 0 5px #3b82f6, 0 0 10px #3b82f6, 0 0 15px #3b82f6;
+            }
+            50% {
+                opacity: 0.8;
+                text-shadow: none;
+            }
+        }
+
+        .motion-blink {
+            animation: pulse-glow 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+        }
+
+        /* Custom CSS for the Blue and Yellow Gradient Text (Joy of Technology) */
+        .gradient-text {
+            /* Blue (#3b82f6) to Yellow (#fcd34d) gradient */
+            background: linear-gradient(45deg, #3b82f6, #fcd34d);
+            -webkit-background-clip: text;
+            background-clip: text;
+            -webkit-text-fill-color: transparent;
+            color: transparent; /* Fallback for non-webkit browsers */
+            display: inline-block; /* Required for text-clipping to work */
+        }
+        
+        /* Cursive style for Deaftek - now only defines the font */
+        .cursive-brand {
+            font-family: 'Dancing Script', cursive;
+            font-weight: 700; /* Use bold version of the cursive font */
+            font-size: 1.1em; /* Slight bump in size to make it prominent */
+            line-height: 1;
+        }
+
+        /* Print styles for clean PDF generation */
+        @media print {
+            /* Hide fixed header and footer */
+            header, footer {
+                display: none !important;
+            }
+            /* Adjust padding for main content */
+            main {
+                padding-top: 0 !important;
+            }
+            /* Hide the Hero section and Skills/Projects/Contact sections if printing the resume/experience section */
+            #about, #skills, #projects, #contact {
+                display: none;
+            }
+            /* Ensure the experience section is visible and fits the page */
+            #experience {
+                display: block;
+                padding-top: 2rem !important; /* Small padding at the top of the PDF */
+                margin: 0 auto;
+                max-width: 800px;
+                color: #000; /* Change text color for white background PDF */
+                background-color: #fff; /* White background for printing */
+            }
+            #experience * {
+                color: #000 !important; /* Ensure all text is black for print */
+            }
+            /* Hide the download button itself when printing */
+            .download-button {
+                display: none !important;
+            }
+            .divider {
+                background-color: #000 !important; /* Black divider for print */
+            }
+            ul li::marker {
+                color: #000 !important;
+            }
+        }
+    </style>
+</head>
+<body class="antialiased">
+
+    <!-- Header & Navigation -->
+    <header class="bg-gray-800 shadow-lg fixed top-0 w-full z-50">
+        <nav class="container mx-auto px-4 py-4 flex justify-between items-center">
+            <a href="#" class="text-xl sm:text-2xl font-bold flex items-center">
+                
+                <!-- NEW: Logo Image Added Here (Placeholder used) -->
+                <img 
+                    src="DT.png" 
+                    alt="Deaftek Logo" 
+                    class="h-8 w-8 mr-2 rounded-full"
+                >
+                <!-- Deaftek (Cursive: Deaf blue, tek white) -->
+                <span class="cursive-brand">
+                    <span class="text-blue-400">Deaf</span><span class="text-white">tek</span>
+                </span>
+                
+                <!-- Separator -->
+                <span class="text-white mx-1">|</span>
+                
+                <!-- Joy of Technology (Sub - Blue & Yellow Gradient) -->
+                 <span class="mx-1 text-gray-400">•</span>
+                <span class="gradient-text">Joy of Technology</span>
+                
+                <!-- Abbreviation -->
+                <span class="text-white ml-1">(DT)</span>
+            </a>
+            
+            <div class="hidden md:flex space-x-6">
+                <a href="#about" class="text-gray-300 hover:text-blue-400 transition-colors">About</a>
+                <!-- NEW RESUME LINK ADDED -->
+                <a href="#experience" class="text-gray-300 hover:text-blue-400 transition-colors">Resume</a>
+                <a href="#skills" class="text-gray-300 hover:text-blue-400 transition-colors">Skills</a>
+                <a href="#projects" class="text-gray-300 hover:text-blue-400 transition-colors">Projects</a>
+                <a href="#contact" class="text-gray-300 hover:text-blue-400 transition-colors">Contact</a>
+            </div>
+            <!-- Mobile Menu Button -->
+            <button id="mobile-menu-btn" class="md:hidden text-gray-300 hover:text-blue-400 focus:outline-none">
+                <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16m-7 6h7"></path>
+                </svg>
+            </button>
+        </nav>
+        
+        <!-- Mobile Menu -->
+        <div id="mobile-menu" class="hidden md:hidden bg-gray-800 px-4 py-2 space-y-2">
+            <a href="#about" class="block text-gray-300 hover:text-blue-400 transition-colors">About</a>
+            <!-- NEW RESUME LINK ADDED -->
+            <a href="#experience" class="block text-gray-300 hover:text-blue-400 transition-colors">Resume</a>
+            <a href="#skills" class="block text-gray-300 hover:text-blue-400 transition-colors">Skills</a>
+            <a href="#projects" class="block text-gray-300 hover:text-blue-400 transition-colors">Projects</a>
+            <a href="#contact" class="block text-gray-300 hover:text-blue-400 transition-colors">Contact</a>
+        </div>
+    </header>
+
+    <main class="pt-20">
+        <!-- Hero Section -->
+        <section class="h-screen flex items-center justify-center text-center bg-gray-950 px-4">
+            <div class="space-y-6 max-w-4xl">
+                <!-- Profile Image -->
+                <div class="mb-6 mx-auto w-40 h-40 rounded-full overflow-hidden border-4 border-blue-400 shadow-xl">
+                    <img src="joy.jpg" alt="Your Profile Photo" onerror="this.onerror=null;this.src='https://placehold.co/160x160/1e293b/d1d5db?text=AJ'" class="w-full h-full object-cover">
+                </div>
+                <h1 class="text-4xl sm:text-5xl lg:text-7xl font-extrabold text-white">
+                    Hello, I'm <span class="text-blue-400">Agbor JOY!</span>
+                </h1>
+                <p class="text-xl sm:text-2xl lg:text-3xl font-light text-gray-300 leading-relaxed">
+                    A Deaf Software Engineer & Data Scientist graduate from the University of Buea, @College of Technology.
+                </p>
+                <p class="text-lg text-gray-400 max-w-2xl mx-auto">
+                    I'm the founder of Deaftek, passionate about leveraging technology to build accessible, impactful solutions and empower the deaf community. <br> <br><span class="motion-blink"> Innovate 🌐 - Inspire 🔹 - Impact ✨</span>
+                </p>
+                <div class="flex flex-col sm:flex-row justify-center space-y-4 sm:space-y-0 sm:space-x-4 mt-8 download-button">
+                    <!-- CV download link pointing to the PDF file, set to download with the specified name -->
+                    <a href="Agbor Joy CV.pdf" download="Agbor_Joy_CV.pdf" class="bg-blue-600 hover:bg-blue-700 text-white font-bold py-3 px-8 rounded-full shadow-lg transition-transform transform hover:scale-105">Download CV (PDF)</a>
+                    <a href="#contact" class="bg-gray-700 hover:bg-gray-600 text-white font-bold py-3 px-8 rounded-full shadow-lg transition-transform transform hover:scale-105">Get in Touch</a>
+                </div>
+            </div>
+        </section>
+
+        <!-- About Me Section -->
+        <section id="about" class="py-20 px-4 bg-gray-800">
+            <div class="container mx-auto max-w-4xl text-center">
+                <h2 class="text-4xl font-bold text-white">About Me</h2>
+                <div class="divider mx-auto"></div>
+                <p class="mt-4 text-gray-300 text-lg leading-relaxed">
+                    I am a recent B.Tech graduate with a dual focus on Computer/Software Engineering and Data Science. My academic journey at the University of Buea, @College of Technology has equipped me with a strong foundation in building robust systems and a passion for extracting meaningful insights from data.
+                </p>
+                <p class="mt-4 text-gray-300 text-lg leading-relaxed">
+                    As a Deaf software engineer and the founder of Deaftek I am driven by the belief that technology should be an equalizer. I'm skilled in full-stack development, mobile applications, and data visualization, always seeking to create solutions that are not only technically sound but also socially impactful.
+                </p>
+                <p class="mt-4 text-gray-300 text-lg leading-relaxed">
+                    My commitment to education and the deaf community extends beyond my technical skills. <br>I'm also a dedicated Teacher of Mathematics at the Buea School for the Deaf (BSD)- Alma mater, Cameroon. <br><br>My interests also include working with Arduino and Drones, as well as Leadership & Networking, Mentoring, Deaf Education, Research, and Cybersecurity.
+                </p>
+            </div>
+        </section>
+
+        <!-- Experience & Education Section -->
+        <section id="experience" class="py-20 px-4 bg-gray-900">
+            <div class="container mx-auto max-w-4xl text-center">
+                <h2 class="text-4xl font-bold text-white">Experience & Education</h2>
+                <div class="divider mx-auto"></div>
+
+                <div class="mt-12 space-y-12">
+
+                    <!-- Professional Experience -->
+                    <h3 class="text-3xl font-semibold text-blue-400">Professional Experience</h3>
+                    
+                    <!-- Experience Item 1: Deafversity Founder -->
+                    <div class="relative text-left border-l-4 border-blue-500 pl-8 pb-8">
+                        <div class="absolute w-4 h-4 bg-blue-500 rounded-full -left-2 top-0"></div>
+                        <p class="text-xs uppercase font-semibold tracking-wider text-gray-500">2025 – Present</p>
+                        <h4 class="text-2xl font-bold text-white mt-1">Founder & Lead Software Engineer </h4>
+                        <p class="text-xl text-gray-300">Deaftek - (in progress)</p>
+                        <ul class="list-disc list-inside mt-2 text-gray-400 space-y-1">
+                            <li>Lived Experience as a Catalyst for Change.</li>
+                            <li>Leading the vision and technical development for accessibility-focused software solutions.</li>
+                            <li>Specializing in creating inclusive products, leveraging modern web and data science stacks.</li>
+                            <li>Building a platform for accessible tech education and STEAM programs for Deaf learners.</li>
+                        </ul>
+                    </div>
+
+                    <!-- Experience Item 2: Teacher -->
+                    <div class="relative text-left border-l-4 border-blue-500 pl-8 pb-8">
+                        <div class="absolute w-4 h-4 bg-blue-500 rounded-full -left-2 top-0"></div>
+                        <p class="text-xs uppercase font-semibold tracking-wider text-gray-500">2025 – Present</p>
+                        <h4 class="text-2xl font-bold text-white mt-1">Teacher of Mathematics</h4>
+                        <p class="text-xl text-gray-300">Buea School for the Deaf (BSD)</p>
+                        <ul class="list-disc list-inside mt-2 text-gray-400 space-y-1">
+                            <li>Educated deaf students in mathematical concepts, adapting curriculum for visual learning.</li>
+                            <li>Mentored students in academic and personal development.</li>
+                        </ul>
+                    </div>
+
+                    <!-- Internships & Programs -->
+                    <div class="pt-12">
+                        <h3 class="text-3xl font-semibold text-blue-400">Internships & Programs</h3>
+                    </div>
+
+                    <!-- Internship Item 1: TwinHeroes Design -->
+                    <div class="relative text-left border-l-4 border-blue-500 pl-8 pb-8">
+                        <div class="absolute w-4 h-4 bg-blue-500 rounded-full -left-2 top-0"></div>
+                        <p class="text-xs uppercase font-semibold tracking-wider text-gray-500">December 2024</p>
+                        <h4 class="text-2xl font-bold text-white mt-1">Participant, Design Program</h4>
+                        <p class="text-xl text-gray-300">TwinHeroes Design</p>
+                        <ul class="list-disc list-inside mt-2 text-gray-400 space-y-1">
+                            <li>Actively participated in a specialized design program focusing on modern UI/UX principles and collaborative methodologies.</li>
+                            <li>Contributed to design sprints and learned industry best practices for product development.</li>
+                        </ul>
+                    </div>
+
+                    <!-- Internship Item 2: Goodmann Enterprise -->
+                    <div class="relative text-left border-l-4 border-blue-500 pl-8 pb-8">
+                        <div class="absolute w-4 h-4 bg-blue-500 rounded-full -left-2 top-0"></div>
+                        <p class="text-xs uppercase font-semibold tracking-wider text-gray-500">2023 – 2024</p>
+                        <h4 class="text-2xl font-bold text-white mt-1">Backend Developer Intern</h4>
+                        <p class="text-xl text-gray-300">Goodmann Enterprise, Molyko</p>
+                        <ul class="list-disc list-inside mt-2 text-gray-400 space-y-1">
+                            <li>Assisted in the development and maintenance of core server-side logic and APIs for enterprise applications.</li>
+                            <li>Gained hands-on experience with database management and backend framework utilization.</li>
+                            <!-- UPDATED ITEM -->
+                            <li>Acquired foundational knowledge in CISCO Networking and Introduction to Cybersecurity.</li>
+                            <li>Utilized networking simulation tools, including Cisco Packet Tracer.</li>
+                        </ul>
+                    </div>
+
+                    <div class="pt-12">
+                        <h3 class="text-3xl font-semibold text-blue-400">🎓Education</h3>
+                    </div>
+                    
+                    <!-- Education Item 1: B.Tech, University of Buea -->
+                    <div class="relative text-left border-l-4 border-blue-500 pl-8 pb-8">
+                        <div class="absolute w-4 h-4 bg-blue-500 rounded-full -left-2 top-0"></div>
+                        <p class="text-xs uppercase font-semibold tracking-wider text-gray-500">2022 – 2025</p>
+                        <h4 class="text-2xl font-bold text-white mt-1">B.Tech, Computer Software Engineering</h4>
+                        <p class="text-xl text-gray-300">University of Buea, College of Technology</p>
+                        <ul class="list-disc list-inside mt-2 text-gray-400 space-y-1">
+                            <li>Specialty in Data Science.</li>
+                            
+                            <li>Status: Completed</li>
+                        </ul>
+                    </div>
+                    
+                    <!-- Education Item 2: GCE Advanced Level -->
+                    <div class="relative text-left border-l-4 border-blue-500 pl-8 pb-8">
+                        <div class="absolute w-4 h-4 bg-blue-500 rounded-full -left-2 top-0"></div>
+                        <p class="text-xs uppercase font-semibold tracking-wider text-gray-500">2020 – 2022</p>
+                        <h4 class="text-2xl font-bold text-white mt-1">General Certificate Education Advanced Level Science</h4>
+                        <p class="text-xl text-gray-300">Awarded in 2022</p>
+                                                 <p class="text-xl text-gray-300">Government Bilingual High School Nkol-Eton Yaounde</p> 
+
+                        <ul class="list-disc list-inside mt-2 text-gray-400 space-y-1">
+                            <li>Subjects/Grades: I.C.T (B), Further Maths (C), Pure Maths with Mechanics (C), Chemistry (C), Physics (O).</li>
+                        </ul>
+                    </div>
+
+                    <!-- Education Item 3: GCE Ordinary Level -->
+                    <div class="relative text-left border-l-4 border-blue-500 pl-8 pb-8">
+                        <div class="absolute w-4 h-4 bg-blue-500 rounded-full -left-2 top-0"></div>
+                        <p class="text-xs uppercase font-semibold tracking-wider text-gray-500">2018 – 2020</p>
+                        <h4 class="text-2xl font-bold text-white mt-1">General Certificate Education Ordinary Level Science</h4>
+                        <p class="text-xl text-gray-300">Awarded in 2020 (English Resit 2021)</p>
+                         <p class="text-xl text-gray-300">Government Bilingual High School Nkol-Eton Yaounde</p>
+                        <ul class="list-disc list-inside mt-2 text-gray-400 space-y-1">
+                            <li>Subjects/Grades: Additional Maths (A), Mathematics (A), Biology (B), Computer Science (B), Physics (B), Economics (B), French (B), Chemistry (C), Geography (C), English Language (C).</li>
+                        </ul>
+                    </div>
+
+                    <!-- Education Item 4: College Polyvalent -->
+                    <div class="relative text-left border-l-4 border-blue-500 pl-8 pb-8">
+                        <div class="absolute w-4 h-4 bg-blue-500 rounded-full -left-2 top-0"></div>
+                        <p class="text-xs uppercase font-semibold tracking-wider text-gray-500">2017 – 2018</p>
+                        <h4 class="text-2xl font-bold text-white mt-1">Studies</h4>
+                        <p class="text-xl text-gray-300">College Polyvalent La M.C.D, Yaounde</p>
+                        <li class="list-disc list-inside mt-2 text-gray-400 space-y-1">Grade: Honour Rolls (Second Row).</li>
+                    </div>
+
+                    <!-- Education Item 5: Buea School for the Deaf -->
+                    <div class="relative text-left border-l-4 border-blue-500 pl-8 pb-8">
+                        <div class="absolute w-4 h-4 bg-blue-500 rounded-full -left-2 top-0"></div>
+                        <p class="text-xs uppercase font-semibold tracking-wider text-gray-500">2008 – 2016</p>
+                        <h4 class="text-2xl font-bold text-white mt-1">Alumnus</h4>
+                        <p class="text-xl text-gray-300">Buea School for the Deaf</p>
+                        <ul class="list-disc list-inside mt-2 text-gray-400 space-y-1">
+                            <li>First School Leaving Certificate (2015).</li>
+                            <li>Completed in Form 1 & 2 (Half Second-Cycle).</li>
+                        </ul>
+                    </div>
+                    
+                </div>
+            </div>
+        </section>
+
+        <!-- Skills Section -->
+        <section id="skills" class="py-20 px-4 bg-gray-800">
+            <div class="container mx-auto max-w-4xl text-center">
+                <h2 class="text-4xl font-bold text-white">My Stack</h2>
+                <div class="divider mx-auto"></div>
+                <div class="mt-8 grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-6">
+                    <!-- Next.js Skill Card -->
+                    <div class="flex flex-col items-center p-6 bg-gray-900 rounded-2xl shadow-lg transition-transform transform hover:scale-105 hover:bg-gray-700">
+                        <img src="https://www.vectorlogo.zone/logos/nextjs/nextjs-icon.svg" alt="Next.js" class="w-16 h-16">
+                        <p class="mt-4 text-gray-300 font-medium">Next.js</p>
+                    </div>
+                    <!-- Tailwind CSS Skill Card -->
+                    <div class="flex flex-col items-center p-6 bg-gray-900 rounded-2xl shadow-lg transition-transform transform hover:scale-105 hover:bg-gray-700">
+                        <img src="https://www.vectorlogo.zone/logos/tailwindcss/tailwindcss-icon.svg" alt="Tailwind CSS" class="w-16 h-16">
+                        <p class="mt-4 text-gray-300 font-medium">Tailwind CSS</p>
+                    </div>
+                    <!-- Laravel Skill Card -->
+                    <div class="flex flex-col items-center p-6 bg-gray-900 rounded-2xl shadow-lg transition-transform transform hover:scale-105 hover:bg-gray-700">
+                        <img src="https://www.vectorlogo.zone/logos/laravel/laravel-icon.svg" alt="Laravel" class="w-16 h-16">
+                        <p class="mt-4 text-gray-300 font-medium">Laravel</p>
+                    </div>
+                    <!-- Nest.js Skill Card -->
+                    <div class="flex flex-col items-center p-6 bg-gray-900 rounded-2xl shadow-lg transition-transform transform hover:scale-105 hover:bg-gray-700">
+                        <img src="https://www.vectorlogo.zone/logos/nestjs/nestjs-icon.svg" alt="Nest.js" class="w-16 h-16">
+                        <p class="mt-4 text-gray-300 font-medium">Nest.js</p>
+                    </div>
+                    <!-- React Native Skill Card -->
+                    <div class="flex flex-col items-center p-6 bg-gray-900 rounded-2xl shadow-lg transition-transform transform hover:scale-105 hover:bg-gray-700">
+                        <img src="https://www.vectorlogo.zone/logos/reactjs/reactjs-icon.svg" alt="React Native" class="w-16 h-16">
+                        <p class="mt-4 text-gray-300 font-medium">React Native</p>
+                    </div>
+                    <!-- MySQL Skill Card -->
+                    <div class="flex flex-col items-center p-6 bg-gray-900 rounded-2xl shadow-lg transition-transform transform hover:scale-105 hover:bg-gray-700">
+                        <img src="https://www.vectorlogo.zone/logos/mysql/mysql-icon.svg" alt="MySQL" class="w-16 h-16">
+                        <p class="mt-4 text-gray-300 font-medium">MySQL</p>
+                    </div>
+                    <!-- TensorFlow Skill Card -->
+                    <div class="flex flex-col items-center p-6 bg-gray-900 rounded-2xl shadow-lg transition-transform transform hover:scale-105 hover:bg-gray-700">
+                        <img src="https://www.vectorlogo.zone/logos/tensorflow/tensorflow-icon.svg" alt="TensorFlow" class="w-16 h-16">
+                        <p class="mt-4 text-gray-300 font-medium">TensorFlow</p>
+                    </div>
+                    <!-- PyTorch Skill Card -->
+                    <div class="flex flex-col items-center p-6 bg-gray-900 rounded-2xl shadow-lg transition-transform transform hover:scale-105 hover:bg-gray-700">
+                        <img src="https://www.vectorlogo.zone/logos/pytorch/pytorch-icon.svg" alt="PyTorch" class="w-16 h-16">
+                        <p class="mt-4 text-gray-300 font-medium">PyTorch</p>
+                    </div>
+                    <!-- Python Skill Card -->
+                    <div class="flex flex-col items-center p-6 bg-gray-900 rounded-2xl shadow-lg transition-transform transform hover:scale-105 hover:bg-gray-700">
+                        <img src="https://www.vectorlogo.zone/logos/python/python-icon.svg" alt="Python" class="w-16 h-16">
+                        <p class="mt-4 text-gray-300 font-medium">Python</p>
+                    </div>
+                    <!-- R Skill Card -->
+                    <div class="flex flex-col items-center p-6 bg-gray-900 rounded-2xl shadow-lg transition-transform transform hover:scale-105 hover:bg-gray-700">
+                        <img src="https://www.vectorlogo.zone/logos/r-project/r-project-icon.svg" alt="R" class="w-16 h-16">
+                        <p class="mt-4 text-gray-300 font-medium">R</p>
+                    </div>
+                    <!-- Bootstrap Skill Card -->
+                    <div class="flex flex-col items-center p-6 bg-gray-900 rounded-2xl shadow-lg transition-transform transform hover:scale-105 hover:bg-gray-700">
+                        <img src="https://www.vectorlogo.zone/logos/getbootstrap/getbootstrap-icon.svg" alt="Bootstrap" class="w-16 h-16">
+                        <p class="mt-4 text-gray-300 font-medium">Bootstrap</p>
+                    </div>
+                     <!-- Arduino Skill Card -->
+                    <div class="flex flex-col items-center p-6 bg-gray-900 rounded-2xl shadow-lg transition-transform transform hover:scale-105 hover:bg-gray-700">
+                        <img src="https://www.vectorlogo.zone/logos/arduino/arduino-icon.svg" alt="Arduino" class="w-16 h-16">
+                        <p class="mt-4 text-gray-300 font-medium">Arduino programming</p>
+                    </div>
+                    <!-- Docker Skill Card -->
+                    <div class="flex flex-col items-center p-6 bg-gray-900 rounded-2xl shadow-lg transition-transform transform hover:scale-105 hover:bg-gray-700">
+                        <img src="https://www.vectorlogo.zone/logos/docker/docker-icon.svg" alt="Docker" class="w-16 h-16">
+                        <p class="mt-4 text-gray-300 font-medium">Docker</p>
+                    </div>
+                    <div class="flex flex-col items-center p-6 bg-gray-900 rounded-2xl shadow-lg transition-transform transform hover:scale-105 hover:bg-gray-700">
+                        <img src="https://www.vectorlogo.zone/logos/figma/figma-icon.svg" alt="Figma" class="w-16 h-16">
+                        <p class="mt-4 text-gray-300 font-medium">Figma</p>
+                    </div>
+                    <!-- WordPress Skill Card -->
+                    <div class="flex flex-col items-center p-6 bg-gray-900 rounded-2xl shadow-lg transition-transform transform hover:scale-105 hover:bg-gray-700">
+                        <img src="https://www.vectorlogo.zone/logos/wordpress/wordpress-icon.svg" alt="WordPress" class="w-16 h-16">
+                        <p class="mt-4 text-gray-300 font-medium">WordPress</p>
+                    </div>
+                    <!-- <div class="flex flex-col items-center p-6 bg-gray-900 rounded-2xl shadow-lg transition-transform transform hover:scale-105 hover:bg-gray-700">
+                        <img src="https://www.vectorlogo.zone/logos/mysql/flutter-icon.svg" alt="Flutter" class="w-16 h-16">
+                        <p class="mt-4 text-gray-300 font-medium">Flutter</p>
+                    </div> -->
+                    
+                </div>
+            </div>
+        </section> 
+
+        <!-- Projects Section -->
+        <section id="projects" class="py-20 px-4 bg-gray-900">
+            <div class="container mx-auto max-w-6xl text-center">
+                <h2 class="text-4xl font-bold text-white">Featured Projects</h2>
+                <div class="divider mx-auto"></div>
+                <div class="mt-12 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+                    <!-- Project 1 Card -->
+                    <a href="#" class="block p-8 bg-gray-800 rounded-2xl shadow-lg transition-transform transform hover:scale-105 hover:shadow-xl">
+                        <h3 class="text-2xl font-bold text-blue-400">Full-Stack Data Dashboard</h3>
+                        <p class="mt-2 text-gray-300">
+                            A web application for data management and visualization, built with Laravel for the backend API, a Next.js frontend, and MySQL for persistent storage.
+                        </p>
+                        <p class="mt-4 text-sm font-medium text-gray-400">Tech: Laravel, Next.js, MySQL</p>
+                    </a>
+                    <!-- Project 2 Card -->
+                    <a href="#" class="block p-8 bg-gray-800 rounded-2xl shadow-lg transition-transform transform hover:scale-105 hover:shadow-xl">
+                        <h3 class="text-2xl font-bold text-blue-400">Mobile Utility App</h3>
+                        <p class="mt-2 text-gray-300">
+                            A cross-platform mobile application for task management, powered by a scalable Nest.js backend and using React Native for the mobile interface.
+                        </p>
+                        <p class="mt-4 text-sm font-medium text-gray-400">Tech: React Native, Nest.js, MySQL</p>
+                    </a>
+                    <!-- Project 3 Card: Sign Language Recognition System -->
+                    <div class="p-8 bg-gray-800 rounded-2xl shadow-lg transition-transform transform hover:scale-105 hover:shadow-xl">
+                        <h3 class="text-2xl font-bold text-blue-400">Sign Language Recognition System</h3>
+                        <p class="mt-2 text-gray-300">
+                            A revolutionary deep learning-based system for recognizing and translating sign language. This project demonstrates expertise in machine learning model development using TensorFlow.
+                        </p>
+                        <p class="mt-4 text-sm font-medium text-gray-400">Tech: Deep Learning, TensorFlow, Python</p>
+                        <div class="mt-6 flex justify-center space-x-4">
+                            <!-- UPDATED: Link now points to the Grizijojo fork -->
+                            <a href="https://github.com/Grizijojo/Sign-Language-Interpreter-Reader-and-Transcriber.git" target="_blank" class="flex items-center space-x-2 px-4 py-2 bg-blue-600 text-white rounded-full hover:bg-blue-700 transition-colors">
+                                <!-- GitHub Icon -->
+                                <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor" viewBox="0 0 16 16">
+                                    <path d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27.68 0 1.36.09 2 .27 1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2-.01.21.15.46.55.38A8.01 8.01 0 0 0 16 8c0-4.42-3.58-8-8-8z"/>
+                                </svg>
+                                <span>GitHub</span>
+                            </a>
+                            <a href="https://your-live-demo-url.vercel.app" target="_blank" class="flex items-center space-x-2 px-4 py-2 bg-gray-700 text-white rounded-full hover:bg-gray-600 transition-colors">
+                                <!-- Demo Icon -->
+                                <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor" viewBox="0 0 16 16">
+                                    <path d="M12.93 12.541a3.01 3.01 0 0 0-3.328-3.328 3.01 3.01 0 0 0-3.328 3.328A3.01 3.01 0 0 0 12.93 12.541zM11.636 9.387a2.008 2.008 0 0 1 2.008-2.008 2.008 2.008 0 0 1-2.008 2.008zm-7.272 0a2.008 2.008 0 0 1 2.008-2.008 2.008 2.008 0 0 1-2.008 2.008zM8 1a7 7 0 1 0 0 14A7 7 0 0 0 8 1zm0 13a6 6 0 1 1 0-12 6 6 0 0 1 0 12z"/>
+                                </svg>
+                                <span>Live Demo</span>
+                            </a>
+                        </div>
+                    </div>
+                    <!-- Project 4 Card: Interactive Data Visualization -->
+                    <a href="#" class="block p-8 bg-gray-800 rounded-2xl shadow-lg transition-transform transform hover:scale-105 hover:shadow-xl">
+                        <h3 class="text-2xl font-bold text-blue-400">Interactive Data Visualization</h3>
+                        <p class="mt-2 text-gray-300">
+                            An interactive web page that visualizes a complex dataset, showcasing my Data Science skills and ability to use libraries like D3.js with Next.js.
+                        </p>
+                        <p class="mt-4 text-sm font-medium text-gray-400">Tech: Next.js, Data Science Libraries</p>
+                    </a>
+                </div>
+            </div>
+        </section>
+
+        <!-- Contact Section -->
+        <section id="contact" class="py-20 px-4 bg-gray-950">
+            <div class="container mx-auto max-w-4xl text-center">
+                <h2 class="text-4xl font-bold text-white">Get In Touch</h2>
+                <div class="divider mx-auto"></div>
+                <p class="mt-4 text-lg text-gray-300">
+                    I'm currently seeking new opportunities and collaborations on tech inclusion and accessiblity. <br> Feel free to reach out to discuss my work or potential projects.
+                </p>
+                <div class="mt-8 flex flex-col sm:flex-row justify-center space-y-4 sm:space-y-0 sm:space-x-4">
+                    <a href="mailto:agborjoyd@gmail.com" class="bg-blue-600 hover:bg-blue-700 text-white font-bold py-3 px-8 rounded-full shadow-lg transition-transform transform hover:scale-105">Email Me</a>
+                    <a href="https://linkedin.com/in/agbor-joy-b24b0b24b" target="_blank" class="bg-gray-700 hover:bg-gray-600 text-white font-bold py-3 px-8 rounded-full shadow-lg transition-transform transform hover:scale-105">LinkedIn</a>
+                    <a href="https://github.com/Grizijojo" target="_blank" class="bg-gray-700 hover:bg-gray-600 text-white font-bold py-3 px-8 rounded-full shadow-lg transition-transform transform hover:scale-105">GitHub</a>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <!-- Footer -->
+    <footer class="bg-gray-800 text-gray-400 py-6 text-center">
+        <p>&copy; 2025 Deaftek💙. All Rights Reserved.</p>
+    </footer>
+
+    <script>
+        // Smooth scrolling for navigation links
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+                document.querySelector(this.getAttribute('href')).scrollIntoView({
+                    behavior: 'smooth'
+                });
+            });
+        });
+
+        // Toggle mobile menu visibility
+        const mobileMenuBtn = document.getElementById('mobile-menu-btn');
+        const mobileMenu = document.getElementById('mobile-menu');
+        mobileMenuBtn.addEventListener('click', () => {
+            mobileMenu.classList.toggle('hidden');
+        });
+        
+    </script>
+</body>
+</html>

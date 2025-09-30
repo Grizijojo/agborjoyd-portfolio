@@ -1,0 +1,326 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CV</title>
+    <link rel="icon" type="image/png" href="joycv.jpg">
+    <style>
+        /* Base styles for the page and print layout */
+        body {
+            display: flex;
+            justify-content: center;
+            align-items: flex-start;
+            min-height: 100vh;
+            background-color: #f4f4f9;
+            margin: 0;
+            padding: 20px;
+            font-family: 'Inter', sans-serif; /* Using Inter for a modern look */
+        }
+
+        #cvCanvas {
+            box-shadow: 0 6px 15px rgba(0, 0, 0, 0.2); /* Slightly stronger shadow */
+            margin: 15px;
+            background-color: white;
+            transition: transform 0.3s ease;
+        }
+
+        /* Print styles: Ensure only the canvas is visible and takes up the full page */
+        @media print {
+            body {
+                background: none;
+                padding: 0;
+                margin: 0;
+            }
+            #cvCanvas {
+                box-shadow: none;
+                width: 100%;
+                height: 100%;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <canvas id="cvCanvas"></canvas>
+
+    <script>
+        // Data Structure for the CV
+        const cvData = {
+            name: "AGBOR JOY D.",
+            title: "Software Engineer | Data Scientist | Founder, Deaftek",
+            mission: "Breaking communication and accessibility barriers between Deaf and hearing communities by combining inclusive digital skills training and innovation in AI/Data Science.",
+            contact: [
+                { icon: "📍", text: "Buea, Cameroon" },
+                { icon:"📱",text:"+237 651-250-474(SMS only)" }, 
+                // FINALIZED CONTACT STRING
+                { icon: "📧", text: "agborjoyd@gmail.com" } 
+            ],
+            education: {
+                institution: "University of Buea - College of Technology",
+                degree: "Bachelor of Technology (B.Tech), Computer Engineering",
+                specialization: "Software Engineering & Data Science",
+                graduation: "Expected Graduation: 2025",
+            },
+            experience: [
+                {
+                    title: "Founder, Deaftek",
+                    duration: "2025 - Present | Buea, Cameroon",
+                    description: "Established a community-driven initiative to provide digital skills and STEM training for Deaf youth. Designed beginner-friendly programs in computer literacy, coding, and data science, advocating strongly for accessibility and inclusive education in technology.",
+                },
+                {
+                    title: "Mathematics Teacher (Part-Time)",
+                    duration: "Buea School for the Deaf",
+                    description: "Taught Mathematics to Deaf students, using sign language and visual-first methods. Served as a role model, inspiring Deaf learners to pursue STEM education.",
+                },
+                {
+                    title: "Academic Internships",
+                    duration: "Aug-Sep 2023 & Aug-Sep 2024 | Goodmann Enterprise, Buea",
+                    description: "Trained in networking and cybersecurity (CISCO, Packet Tracer). Gained hands-on skills in UI/UX design (Figma), Dynamic Web PHP, and introduction to cybersecurity.",
+                },
+            ],
+            skills: {
+                programming: ["Python", "HTML", "CSS", "Java", "WordPress"],
+                designTools: ["Figma", "Canva", "Photoshop", "Packet Tracer"],
+                specialties: ["Data Science", "AI", "Machine Learning", "Arduino Programming", "Accessibility in Tech"],
+                languages: ["Cameroon Sign Language (Proficient)", "ASL (Good)", "English (Proficient)", "French (Good)"],
+            },
+        };
+
+        const canvas = document.getElementById('cvCanvas');
+        const ctx = canvas.getContext('2d');
+
+        // A4 dimensions in pixels (96 DPI)
+        const A4_WIDTH = 794;
+        const A4_HEIGHT = 1123;
+        canvas.width = A4_WIDTH;
+        canvas.height = A4_HEIGHT;
+
+        // --- Layout and Colors ---
+        const PADDING_X = 50;
+        const PADDING_TOP = 40;
+        const PADDING_BOTTOM = 40;
+        const COLUMN_DIVIDER = 250; 
+        const LEFT_COL_WIDTH = COLUMN_DIVIDER - PADDING_X - 20;
+        const RIGHT_COL_START = COLUMN_DIVIDER + 20;
+        const RIGHT_COL_WIDTH = A4_WIDTH - RIGHT_COL_START - PADDING_X;
+        
+        // New Clean Blue Accent
+        const ACCENT_BLUE = '#007BFF'; 
+        const PRIMARY_TEXT_COLOR = '#343A40';
+        const SECONDARY_TEXT_COLOR = '#6C757D';
+
+        // --- Utility Functions ---
+
+        // Function to draw text with generous line wrapping
+        function drawWrappedText(text, x, y, maxWidth, lineHeight, textAlign = 'left') {
+            const words = text.split(' ');
+            let line = '';
+            let currentY = y;
+            ctx.textAlign = textAlign;
+
+            for (let n = 0; n < words.length; n++) {
+                const testLine = line + words[n] + ' ';
+                const metrics = ctx.measureText(testLine);
+                const testWidth = metrics.width;
+
+                if (testWidth > maxWidth && n > 0) {
+                    let drawX = x;
+                    if (textAlign === 'center') {
+                        drawX = x + (maxWidth / 2);
+                    }
+                    ctx.fillText(line, drawX, currentY);
+                    line = words[n] + ' ';
+                    currentY += lineHeight;
+                } else {
+                    line = testLine;
+                }
+            }
+            let drawX = x;
+            if (textAlign === 'center') {
+                drawX = x + (maxWidth / 2);
+            }
+            ctx.fillText(line, drawX, currentY);
+            
+            // Reset to default for other elements
+            ctx.textAlign = 'left';
+
+            // Return the new Y position after the block, adding extra space (lineHeight * 0.75)
+            return currentY + lineHeight * 0.75; 
+        }
+
+        // Function to draw a section title (with enhanced blue divider)
+        function drawSectionTitle(text, x, y, dividerStart, dividerEnd, color = PRIMARY_TEXT_COLOR) {
+            ctx.fillStyle = color;
+            ctx.font = 'bold 17px "Inter", Arial';
+            ctx.textAlign = 'left';
+            ctx.fillText(text.toUpperCase(), x, y);
+
+            // Draw a thick blue horizontal line under the title
+            ctx.strokeStyle = ACCENT_BLUE;
+            ctx.lineWidth = 2;
+            ctx.beginPath();
+            ctx.moveTo(dividerStart, y + 6);
+            ctx.lineTo(dividerEnd, y + 6);
+            ctx.stroke();
+
+            return y + 30; // Increased vertical space after title
+        }
+
+        // --- Main Drawing Function ---
+        function drawCV() {
+            // 1. Clear Canvas
+            ctx.fillStyle = '#ffffff';
+            ctx.fillRect(0, 0, A4_WIDTH, A4_HEIGHT);
+            
+            let currentY = PADDING_TOP;
+
+            // 2. HEADER: Name and Title
+            ctx.fillStyle = PRIMARY_TEXT_COLOR; 
+            ctx.font = 'bold 36px "Inter", Arial';
+            ctx.textAlign = 'left';
+            ctx.fillText(cvData.name, PADDING_X, currentY);
+            currentY += 40;
+
+            ctx.fillStyle = ACCENT_BLUE; // Accent color
+            ctx.font = '15px "Inter", Arial';
+            ctx.fillText(cvData.title, PADDING_X, currentY);
+            currentY += 35; // Generous space after title
+
+            // Draw subtle header separator line
+            ctx.strokeStyle = '#DCDCDC'; // Very light gray line
+            ctx.lineWidth = 1;
+            ctx.beginPath();
+            ctx.moveTo(PADDING_X, currentY);
+            ctx.lineTo(A4_WIDTH - PADDING_X, currentY);
+            ctx.stroke();
+            currentY += 30; // More space after separator
+
+            // 3. LAYOUT SETUP: Draw the two columns
+            let rightY = currentY;
+            let leftY = currentY;
+
+            // Draw vertical separator line (Very Faint Gray)
+            ctx.strokeStyle = '#EAEAEA';
+            ctx.lineWidth = 1;
+            ctx.beginPath();
+            ctx.moveTo(COLUMN_DIVIDER, currentY);
+            ctx.lineTo(COLUMN_DIVIDER, A4_HEIGHT - PADDING_BOTTOM);
+            ctx.stroke();
+
+
+            // --- LEFT COLUMN (Contact, Education, Skills) ---
+            
+            // A. Contact Info
+            ctx.fillStyle = SECONDARY_TEXT_COLOR;
+            ctx.font = '12px "Inter", Arial';
+            cvData.contact.forEach(item => {
+                ctx.fillText(`${item.icon} ${item.text}`, PADDING_X, leftY);
+                leftY += 18; // Increased line height
+            });
+            leftY += 30; // More space before next section
+
+            // B. Education
+            leftY = drawSectionTitle('Education', PADDING_X, leftY, PADDING_X, COLUMN_DIVIDER - 10);
+            
+            ctx.fillStyle = PRIMARY_TEXT_COLOR;
+            ctx.font = 'bold 13px "Inter", Arial';
+            leftY = drawWrappedText(cvData.education.institution, PADDING_X, leftY, LEFT_COL_WIDTH, 16);
+
+            ctx.font = '13px "Inter", Arial';
+            leftY = drawWrappedText(cvData.education.degree, PADDING_X, leftY, LEFT_COL_WIDTH, 16);
+            
+            ctx.font = 'italic 12px "Inter", Arial';
+            leftY = drawWrappedText(cvData.education.graduation, PADDING_X, leftY, LEFT_COL_WIDTH, 16);
+
+            leftY += 30; // More space
+
+            // C. Skills & Expertise
+            leftY = drawSectionTitle('Skills & Expertise', PADDING_X, leftY, PADDING_X, COLUMN_DIVIDER - 10);
+            
+            ctx.fillStyle = PRIMARY_TEXT_COLOR;
+            const skillCategories = [
+                { title: "Programming", list: cvData.skills.programming },
+                { title: "Specialties", list: cvData.skills.specialties },
+                { title: "Languages", list: cvData.skills.languages }
+            ];
+
+            skillCategories.forEach(cat => {
+                ctx.font = 'bold 12px "Inter", Arial';
+                ctx.fillText(cat.title, PADDING_X, leftY);
+                leftY += 16; // Small gap after title
+
+                ctx.font = '12px "Inter", Arial';
+                // Drawing tags as a comma-separated list
+                leftY = drawWrappedText(cat.list.join(' • '), PADDING_X, leftY, LEFT_COL_WIDTH, 18); // Increased line height
+                leftY += 20; // Increased space between categories
+            });
+            
+            // D. Design Tools
+            ctx.font = 'bold 12px "Inter", Arial';
+            ctx.fillText("Design Tools", PADDING_X, leftY);
+            leftY += 16;
+            ctx.font = '12px "Inter", Arial';
+            leftY = drawWrappedText(cvData.skills.designTools.join(' • '), PADDING_X, leftY, LEFT_COL_WIDTH, 18);
+            leftY += 20;
+
+
+            // --- RIGHT COLUMN (Mission, Experience) ---
+            
+            // A. Mission Statement (Career Objective)
+            rightY = drawSectionTitle('Career Objective', RIGHT_COL_START, rightY, RIGHT_COL_START, A4_WIDTH - PADDING_X);
+
+            ctx.fillStyle = PRIMARY_TEXT_COLOR;
+            ctx.font = 'italic 13px "Inter", Arial';
+            
+            // *** Reverted to Left Alignment (default) for the objective text ***
+            rightY = drawWrappedText(cvData.mission, RIGHT_COL_START, rightY, RIGHT_COL_WIDTH, 20, 'left'); 
+            
+            rightY += 30; // More space
+
+            // B. Experience
+            rightY = drawSectionTitle('Relevant Experience', RIGHT_COL_START, rightY, RIGHT_COL_START, A4_WIDTH - PADDING_X);
+
+            cvData.experience.forEach((job, index) => {
+                // Title and Duration
+                ctx.fillStyle = ACCENT_BLUE; // Accent color for the job title
+                ctx.font = 'bold 14px "Inter", Arial';
+                rightY = drawWrappedText(job.title, RIGHT_COL_START, rightY, RIGHT_COL_WIDTH, 18);
+                
+                ctx.fillStyle = SECONDARY_TEXT_COLOR;
+                ctx.font = 'italic 12px "Inter", Arial';
+                rightY = drawWrappedText(job.duration, RIGHT_COL_START, rightY, RIGHT_COL_WIDTH, 16);
+                
+                // Description 
+                const descriptionLines = job.description.split('. ');
+                ctx.fillStyle = PRIMARY_TEXT_COLOR;
+                ctx.font = '12px "Inter", Arial';
+                
+                descriptionLines.forEach(line => {
+                    if (line.trim().length > 0) {
+                        const bullet = '• ';
+                        const descriptionText = bullet + line.trim();
+                        rightY = drawWrappedText(descriptionText, RIGHT_COL_START + 10, rightY, RIGHT_COL_WIDTH - 10, 18); // Increased line height and slight indent
+                    }
+                });
+                
+                rightY += 25; // Generous space between jobs
+            });
+            
+            // 4. FOOTER (Small note for printing)
+            ctx.fillStyle = '#C0C0C0';
+            ctx.font = 'italic 9px "Inter", Arial';
+            ctx.textAlign = 'center';
+            ctx.fillText('Powered by Deaftek🌐💻🚀).', A4_WIDTH / 2, A4_HEIGHT - 15);
+            ctx.textAlign = 'left'; 
+
+            // Final check for column overflow is maintained
+            if (leftY > A4_HEIGHT - PADDING_BOTTOM || rightY > A4_HEIGHT - PADDING_BOTTOM) {
+                console.warn("Content overflowed the canvas boundaries.");
+            }
+        }
+
+        window.onload = drawCV;
+    </script>
+</body>
+</html>
